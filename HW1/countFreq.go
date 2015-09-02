@@ -8,6 +8,7 @@ import (
 )
 
 var wordCount map[string]int
+var tagCount map[string]int
 
 func main() {
 	if len(os.Args) != 2 {
@@ -22,20 +23,32 @@ func main() {
 	}
 
 	wordCount = make(map[string]int)
+	tagCount = make(map[string]int)
 
 	reader := bufio.NewReader(file)
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
+	var tags []string
 
 	for scanner.Scan() {
 		members := strings.SplitAfter(scanner.Text(), " ")
+
+		if tags == nil || len(members) < 2 {
+			tags = []string{"*", "*", "*"}
+		}
+
 		if len(members) == 2 {
 			wordCount[members[0]]++
+			tags = append(tags[1:], members[1])
+			tagCount[strings.Join(tags, " ")]++
 		}
 	}
 
 	// print word counts
 	for word, count := range wordCount {
 		fmt.Println(word, count)
+	}
+	for tag, count := range tagCount {
+		fmt.Println(tag, count)
 	}
 }
