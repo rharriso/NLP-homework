@@ -8,7 +8,8 @@ import (
 )
 
 var wordCount map[string]int
-var tagCount map[string]int
+var biTagCount map[string]int
+var triTagCount map[string]int
 
 func main() {
 	if len(os.Args) != 2 {
@@ -23,7 +24,8 @@ func main() {
 	}
 
 	wordCount = make(map[string]int)
-	tagCount = make(map[string]int)
+	biTagCount = make(map[string]int)
+	triTagCount = make(map[string]int)
 
 	reader := bufio.NewReader(file)
 	scanner := bufio.NewScanner(reader)
@@ -40,7 +42,8 @@ func main() {
 		if len(members) == 2 {
 			wordCount[members[0]]++
 			tags = append(tags[1:], members[1])
-			tagCount[strings.Join(tags, " ")]++
+			biTagCount[strings.Join(tags[1:], " ")]++
+			triTagCount[strings.Join(tags, " ")]++
 		}
 	}
 
@@ -48,7 +51,14 @@ func main() {
 	for word, count := range wordCount {
 		fmt.Println(word, count)
 	}
-	for tag, count := range tagCount {
+
+	fmt.Println("\nBi Tag Count:")
+	for tag, count := range biTagCount {
+		fmt.Println(tag, count)
+	}
+
+	fmt.Println("\nTri Tag Count:")
+	for tag, count := range triTagCount {
 		fmt.Println(tag, count)
 	}
 }
